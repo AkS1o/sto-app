@@ -2,20 +2,26 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom';
 
+import App from './App';
+import { store } from "./store"
+import reportWebVitals from './reportWebVitals';
+import { AuthUser } from './view/Auth/Login/actions';
+
 import 'bootstrap/dist/css/bootstrap.css';
 import './index.css';
 
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { store } from "./store"
+const token = localStorage.token as string;
+
+if (token) {
+  AuthUser(token, store.dispatch);
+}
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter >
       <App />
     </BrowserRouter>
-  </Provider>
-  ,
+  </Provider>,
   document.getElementById('root')
 );
 

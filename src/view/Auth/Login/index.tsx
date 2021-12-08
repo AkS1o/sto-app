@@ -1,44 +1,47 @@
 import { useState } from "react";
-import { useFormik, Form, FormikProvider } from 'formik';
+import { useNavigate } from "react-router";
+import { useFormik, Form, FormikProvider, FormikHelpers } from 'formik';
 
 import { useActions } from "../../../hooks/useActions";
 import { validationFields } from './validation';
-import { ILoginModel } from "./types";
+import { ILoginModel, LoginServerError } from "./types";
 
 import InputGroup from "../../../components/InputGroup";
 
 const Login: React.FC = () => {
-
     const { LoginUser } = useActions();
 
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
-    const [state, setState] = useState<ILoginModel>({
-        email: "",
-        password: "",
-    });
+    const [invalid, setInvalid] = useState<string>("");
+    const navigator = useNavigate();
 
     const initialValues: ILoginModel = { email: '', password: '' };
 
-    const hendlerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setState({
-            ...state,
-            [e.target.name]: e.target.value,
-
-        })
-    };
-
-    const onHandleSubmit = async (values: ILoginModel) => {
-        console.log("values submit: ", values);
-        return;
+    const onHandleSubmit = async (values: ILoginModel, { setFieldError }: FormikHelpers<ILoginModel>) => {
         try {
             setIsSubmit(true);
-            console.log("Login begin form");
-            await LoginUser(state);
-            console.log("submit form", state);
+
+            await LoginUser(values);
+
             setIsSubmit(false);
+            navigator("/");
         } catch (ex) {
-            console.log("problem form");
+            const serverErrors = ex as LoginServerError;
+
+            Object.entries(serverErrors).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    let message = "";
+                    value.forEach((item) => {
+                        message += `${item} `;
+                    });
+                    setFieldError(key, message);
+                }
+            });
+
+            if (serverErrors.error) {
+                setInvalid(serverErrors.error);
+            }
+
             setIsSubmit(false);
         }
     };
@@ -50,13 +53,14 @@ const Login: React.FC = () => {
 
     });
 
-    const { errors, touched, handleChange, handleSubmit } = formik;
+    const { errors, touched, handleChange, handleSubmit, setFieldError } = formik;
 
     return (
         <>
             <h1>Login</h1>
             <FormikProvider value={formik} >
                 <Form onSubmit={handleSubmit}>
+                    {invalid && <div className="alert alert-danger">{invalid}</div>}
                     <InputGroup
                         label="Email"
                         field="email"

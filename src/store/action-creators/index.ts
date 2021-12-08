@@ -1,4 +1,4 @@
-import * as AuthActionCreators from './auth';
+import * as AuthActionCreators from "../../view/Auth/Login/actions";
 
 const action = {
     ...AuthActionCreators
