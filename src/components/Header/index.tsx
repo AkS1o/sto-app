@@ -1,18 +1,14 @@
 import { Link } from "react-router-dom";
-
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const Header = () => {
 
   const { isAuth, user } = useTypedSelector(state => state.auth);
-
-  console.log(user.email)
-
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">
         <Link className="navbar-brand" to="/">
-          Car service
+          Auto Service
         </Link>
         <button
           className="navbar-toggler"
@@ -30,6 +26,11 @@ const Header = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/service/create">
                 Service
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/products/list">
+                Products
               </Link>
             </li>
           </ul>
@@ -50,7 +51,7 @@ const Header = () => {
             <ul className="navbar-nav">
               <li className="nav-item">
                 <Link className="nav-link" to="/register">
-                  Registration
+                  Register
                 </Link>
               </li>
               <li className="nav-item">

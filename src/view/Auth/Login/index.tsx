@@ -15,7 +15,10 @@ const Login: React.FC = () => {
     const [invalid, setInvalid] = useState<string>("");
     const navigator = useNavigate();
 
-    const initialValues: ILoginModel = { email: '', password: '' };
+    const initialValues: ILoginModel = {
+        email: '',
+        password: ''
+    };
 
     const onHandleSubmit = async (values: ILoginModel, { setFieldError }: FormikHelpers<ILoginModel>) => {
         try {
@@ -50,10 +53,9 @@ const Login: React.FC = () => {
         initialValues: initialValues,
         validationSchema: validationFields,
         onSubmit: onHandleSubmit
-
     });
 
-    const { errors, touched, handleChange, handleSubmit, setFieldError } = formik;
+    const { errors, touched, handleChange, handleSubmit } = formik;
 
     return (
         <>
@@ -75,7 +77,12 @@ const Login: React.FC = () => {
                         error={errors.password}
                         touched={touched.password}
                         onChange={handleChange} />
-                    <button type="submit" className="btn btn-primary" disabled={isSubmit}>Login</button>
+                    <button 
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={isSubmit}>
+                        Login
+                    </button>
                 </Form>
             </FormikProvider>
         </>

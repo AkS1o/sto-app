@@ -1,5 +1,8 @@
 import { Dispatch } from "react";
+import axios, { AxiosError } from "axios";
 import jwt from 'jsonwebtoken';
+
+import http from "../../../http_common";
 import {
     ILoginModel,
     ILoginResponse,
@@ -7,11 +10,8 @@ import {
     AuthAction,
     AuthActionTypes,
     IUser,
-    LoginAction,
 } from "./types";
-import axios, { AxiosError } from "axios";
 
-import http from "../../../http_common";
 
 export const LoginUser = (data: ILoginModel) => {
     return async (dispatch: Dispatch<AuthAction>) => {
@@ -22,7 +22,6 @@ export const LoginUser = (data: ILoginModel) => {
             localStorage.token = access_token;
             AuthUser(access_token, dispatch);
 
-            console.log("End redux login", response.data);
             return Promise.resolve();
         } catch (error) {
             if (axios.isAxiosError(error)) {
