@@ -3,7 +3,7 @@ import { useTypedSelector } from "../../hooks/useTypedSelector";
 
 const Header = () => {
 
-  const { isAuth, user } = useTypedSelector(state => state.auth);
+  const { isAuth, user } = useTypedSelector(state => state.login);
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
       <div className="container">

@@ -29,7 +29,7 @@ const Register: React.FC = () => {
             await RegisterUser(values);
 
             setIsSubmit(false);
-            navigator("/");
+            navigator("/login");
 
         } catch (ex) {
             const serverErrors = ex as RegisterServerError;

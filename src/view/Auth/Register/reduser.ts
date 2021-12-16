@@ -9,7 +9,7 @@ const initialState: RegisterState = {
     }
 }
 
-export const authReducer = (state = initialState, action: RegisterAction) => {
+export const regiserReducer = (state = initialState, action: RegisterAction) => {
     switch (action.type) {
         case RegisterActionTypes.REGISTER: {
             return {
