@@ -2,6 +2,9 @@ import qs from "qs";
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+
 import { useActions } from "../../../hooks/useActions";
 import { useTypedSelector } from "../../../hooks/useTypedSelector";
 
@@ -10,11 +13,15 @@ import {
     ProductServerError
 } from "../types";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-
 const ProductsList: React.FC = () => {
+
+    const [id, setId] = useState<string>("");
+    const [name, setName] = useState<string>("");
+    const [detail, setDetail] = useState<string>("");
+
+
     const [invalid, setInvalid] = useState<string>("");
+    const [isSubmit, setIsSubmit] = useState<boolean>(false);
     const [searchParams, setSearchParams] = useSearchParams();
 
     const { GetProducts, DeleteProduct } = useActions();
@@ -51,6 +58,23 @@ const ProductsList: React.FC = () => {
             }
         }
     }
+
+    const onGetId = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const id = e.target.value;
+        setId(id);
+    }
+
+    const onGetName = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const name = e.target.value;
+        setName(name);
+    }
+
+    const onGetDetail = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const detail = e.target.value;
+        setDetail(detail);
+    }
+
+    const data: IProductSearch = { ...search, id, name, detail };
 
     return (
         <>
@@ -96,7 +120,7 @@ const ProductsList: React.FC = () => {
                             </table>
                             <div className="text-end">
                                 {buttons.map((item, key) => {
-                                    const data: IProductSearch = { ...search, page: item, };
+                                    const data: IProductSearch = { ...search, page: item };
                                     return (
                                         <Link
                                             onClick={() => { setSearch(data); }}
@@ -115,6 +139,26 @@ const ProductsList: React.FC = () => {
                     <div className="card mt-3">
                         <div className="card-body">
                             <Link className="btn btn-primary w-100" to="/products/add-product">Add Product</Link>
+                        </div>
+                        <div className="card-body">
+                            <div className="form-group mb-3">
+                                <label htmlFor="id" className="form-label">Id</label>
+                                <input type="text" name="id" className="form-control" id="id" onChange={onGetId} />
+                            </div>
+                            <div className="form-group mb-3">
+                                <label htmlFor="name" className="form-label">Name</label>
+                                <input type="text" name="name" className="form-control" id="name" onChange={onGetName} />
+                            </div>
+                            <div className="form-group mb-3">
+                                <label htmlFor="detail" className="form-label">Detail</label>
+                                <input type="text" name="detail" className="form-control" id="detail" onChange={onGetDetail} />
+                            </div>
+                            <Link
+                                onClick={() => { setSearch(data); }}
+                                to={"?" + qs.stringify(data)}
+                                className="btn btn-primary mx-1">
+                                Search
+                            </Link>
                         </div>
                     </div>
                 </div>
